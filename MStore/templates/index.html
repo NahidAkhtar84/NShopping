@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content%}
+<!--  body start-->
+
+
+<!-- Main Slider Start -->
+<div class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <nav class="navbar bg-light">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/"><i class="fa fa-home"></i>Home</a>
+                        </li>
+                        {% for category in categories%}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/products?category={{category.id}}"><i class="{{ category.icon }}"></i>{{ category.name }}</a>
+                            </li>
+                            {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+            {% if sliders%}
+            <div class="col-md-6">
+                <div class="header-slider normal-slider">
+                    {% for slide in sliders%}
+                    <div class="header-slider-item">
+
+                        {% if slide.url_link %} <a href="{{ slide.url_link }}"> {% endif %}
+                        <img src="{{ slide.get_image_url }}" alt="Slider Image" />
+                        {% if slide.url_link %} </a> {% endif %}
+                        {% if slide.description %}
+                        <div class="header-slider-caption">
+                            {% if slide.header %}
+                            <p>{{ slide.header|safe }}</p>
+                            {% endif %}
+                            {% if slide.description %}
+                            <h6><b>{{ slide.description|safe }}</b></h6>
+                            {% endif %}
+                            {% if slide.button_text %}
+                            <a class="btn" href="{{ slide.url_link }}"><i class="fa fa-shopping-cart"></i>{{ slide.button_text }}</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if screens %}
+            <div class="col-md-3">
+                <div class="header-img">
+                {% for screen in screens %}
+                    <div class="img-item">
+                        <img src="{{ screen.get_image_url }}" />
+                        {% if screen.header %}
+                        <a class="img-text" href="{{ screen.url_link }}">
+                            <p>{{ screen.header }}</p>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- Main Slider End -->
+
+
+<!-- Featured Product Start -->
+        <div class="featured-product product">
+            <div class="container-fluid">
+                <div class="section-header">
+                    <h1>Featured Product</h1>
+                </div>
+                <div class="row align-items-center product-slider product-slider-4">
+
+                    {% for product in products%}
+                    {% if product.featured %}
+                    <div class="col-lg-3">
+                        <div class="product-item">
+                            <div class="product-title">
+                                <a href="#">{{ product.name }}</a>
+                                <div class="ratting">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="product-image">
+                                <a href="product-detail.html">
+                                    {% if product.productimage_set.all %}
+                                    {% for item in product.productimage_set.all %}
+                                    {% if item.featured %}
+                                    <img src="{{item.image.url}}" class="card-img-top" alt="...">
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <img src="{% static 'Uploads/products/placeholder.jpg' %}" class="card-img-top"
+                                         alt="My image">
+                                    {% endif %}
+                                </a>
+
+                            </div>
+                            <div class="product-price">
+                                <h3><span>৳ {{product.price}}</span></h3>
+                                <a class="btn" href="{% url 'singlepropa' product.slug %}"><i
+                                        class="fa fa-shopping-cart"></i>View</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Featured Product End -->
+
+
+<!-- Recent Product Start -->
+
+        <div class="featured-product product">
+            <div class="container-fluid">
+                <div class="section-header">
+                    <h1>Recent Product</h1>
+                </div>
+                <div class="row align-items-center product-slider product-slider-4">
+                    {% for product in products%}
+                    <div class="col-lg-3">
+                        <div class="product-item">
+                            <div class="product-title">
+                                <a href="#">{{ product.name }}</a>
+                                <div class="ratting">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="product-image">
+                                <a href="product-detail.html">
+                                    {% if product.productimage_set.all %}
+                                    {% for item in product.productimage_set.all %}
+                                    {% if item.featured %}
+                                    <img src="{{item.image.url}}" class="card-img-top" alt="...">
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <img src="{% static 'Uploads/products/placeholder.jpg' %}" class="card-img-top"
+                                         alt="My image">
+                                    {% endif %}
+                                </a>
+
+                            </div>
+                            <div class="product-price">
+                                <h3><span>৳ {{product.price}}</span></h3>
+                                <a class="btn" href="{% url 'singlepropa' product.slug %}"><i
+                                        class="fa fa-shopping-cart"></i>View</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Recent Product End -->
+
+
+<!-- New Product Start -->
+{% if new_products %}
+        <div class="new-product product " id="new-product">
+            <div class="container-fluid">
+                <div class="section-header">
+                    <h1>New Products</h1>
+                </div>
+                <div class="row align-items-center product-slider product-slider-4">
+                    {% for product in new_products%}
+
+                    <div class="col-lg-3">
+                        <div class="product-item">
+                            <div class="product-title">
+                                <a href="#">{{ product.name }}</a>
+                                <div class="ratting">
+                                    <span class="badge badge-pill badge-info">New</span>
+                                </div>
+                            </div>
+                            <div class="product-image">
+                                <a href="product-detail.html">
+                                    {% if product.productimage_set.all %}
+                                    {% for item in product.productimage_set.all %}
+                                    {% if item.featured %}
+                                    <img src="{{item.image.url}}" class="card-img-top" alt="...">
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <img src="{% static 'Uploads/products/placeholder.jpg' %}" class="card-img-top"
+                                         alt="My image">
+                                    {% endif %}
+                                </a>
+
+                            </div>
+                            <div class="product-price">
+                                <h3><span>৳ {{product.price}}</span></h3>
+                                <a class="btn" href="{% url 'singlepropa' product.slug %}"><i
+                                        class="fa fa-shopping-cart"></i>View</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Recent Product End -->
+{% endif %}
+
+
+<!-- New Product Start -->
+{% if summer_products %}
+        <div class="featured-product product " id="summer-product">
+            <div class="container-fluid">
+                <div class="section-header">
+                    <h1>Summer Specials</h1>
+                </div>
+                <div class="row align-items-center product-slider product-slider-4">
+                    {% for product in summer_products%}
+
+                    <div class="col-lg-3">
+                        <div class="product-item">
+                            <div class="product-title">
+                                <a href="#">{{ product.name }}</a>
+                                <div class="ratting">
+                                    <span class="badge badge-pill badge-warning">Summer Lot</span>
+                                </div>
+                            </div>
+                            <div class="product-image">
+                                <a href="product-detail.html">
+                                    {% if product.productimage_set.all %}
+                                    {% for item in product.productimage_set.all %}
+                                    {% if item.featured %}
+                                    <img src="{{item.image.url}}" class="card-img-top" alt="...">
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <img src="{% static 'Uploads/products/placeholder.jpg' %}" class="card-img-top"
+                                         alt="My image">
+                                    {% endif %}
+                                </a>
+
+                            </div>
+                            <div class="product-price">
+                                <h3><span>৳ {{product.price}}</span></h3>
+                                <a class="btn" href="{% url 'singlepropa' product.slug %}"><i
+                                        class="fa fa-shopping-cart"></i>View</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Recent Product End -->
+{% endif %}
+
+
+{% endblock %}

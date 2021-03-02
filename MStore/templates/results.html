@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content%}
+
+<h1>You have searched for: {{ query }}</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">sl. No.</th>
+      <th scope="col">Image</th>
+      <th scope="col">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for product in products%}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td>
+          {% if product.productimage_set.all %}
+             {% for item in product.productimage_set.all %}
+             {% if item.featured %}
+          <a href="{{ product.get_absolute_url }}">
+              <img style="height: 87px; width: 87px;" src="{{item.image.url}}" class="card-img-top" alt="..."></a>
+             {% endif %}
+             {% endfor %}
+             {% else %}
+          <a href="{{ product.get_absolute_url }}">
+              <img style="height: 87px; width: 87px;" src="{% static 'Uploads/products/placeholder.jpg' %}" class="card-img-top" alt="My image"></a>
+             {% endif %}
+      </td>
+        <td><a href="{{ product.get_absolute_url }}">{{ product }}</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

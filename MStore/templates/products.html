@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load temptags %}
+
+{% block content%}
+<!--  body start-->
+
+<!-- Breadcrumb Start -->
+<div class="breadcrumb-wrap">
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active"><a href="/products">Products</a></li>
+        </ul>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Product List Start -->
+<div class="product-view">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="product-view-top">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="product-short">
+                                        <div class="dropdown">
+                                            <div class="dropdown-toggle" data-toggle="dropdown">Product short by</div>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="/products?productstate=newest" class="dropdown-item">Newest</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="product-price-range">
+                                        <div class="dropdown">
+                                            <div class="dropdown-toggle" data-toggle="dropdown">Product price range
+                                            </div>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <div class="container">
+                                                <form action="/products" method="GET">
+                                                  <div class="form-group">
+                                                    <label>Price From</label>
+                                                    <input type="number" name="prerange" value="" class="form-control" >
+                                                  </div>
+                                                    <div class="form-group">
+                                                    <label>Price To</label>
+                                                    <input type="number" name="postrange" value="" class="form-control" >
+                                                  </div>
+                                                  <button type="submit" class="btn btn-primary">Submit</button>
+                                                </form>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for product in products%}
+
+                    <div class="col-md-4">
+                        <div class="product-item" id="{{product.id}}">
+                            <div class="product-title">
+                                <a href="#">{{product.name}}</a>
+                                <div class="ratting">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="product-image">
+                                <a href="product-detail.html">
+                                    {% if product.productimage_set.all %}
+                                    {% for item in product.productimage_set.all %}
+                                    {% if item.featured %}
+                                    <img src="{{item.image.url}}" class="card-img-top" alt="...">
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <img src="{% static 'Uploads/products/placeholder.jpg' %}" class="card-img-top"
+                                         alt="My image">
+                                    {% endif %}
+                                </a>
+
+                            </div>
+                            <div class="product-price">
+                                <h3><span>৳ {{product.price}}</span></h3>
+                                <a class="btn" href="{% url 'singlepropa' product.slug %}"><i
+                                        class="fa fa-shopping-cart"></i>View</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="col-md-12">
+                    <nav aria-label="Page navigation example">
+                        {% if products.has_other_pages %}
+                        <ul class="pagination justify-content-center">
+                            {% if products.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+                            </li>
+                            {% else%}
+                            <li class="disabled"></li>
+                            {% endif %}
+                            {% for i in products.paginator.page_range %}
+                            {% if products.number == i %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if products.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                            </li>
+                            {% else %}
+                            <li class="disabled"><span></span></li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+
+
+            <!-- Side Bar Start -->
+            <div class="col-lg-4 sidebar">
+                <div class="sidebar-widget category">
+                    <h2 class="title">Category</h2>
+                    <nav class="navbar bg-light">
+                        <ul class="navbar-nav">
+                            {% for category in categories%}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/products?category={{category.id}}"><i class="{{ category.icon }}"></i>{{ category.name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Side Bar Ends -->
+
+                <div class="sidebar-widget widget-slider">
+                    <div class="sidebar-slider normal-slider">
+                        {% for product in products%}
+                    {% if product.featured %}
+                        <div class="product-item">
+                            <div class="product-title">
+                                <a href="#">{{ product.name }}</a>
+                                <div class="ratting">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="product-image">
+                                <a href="product-detail.html">
+                                    {% if product.productimage_set.all %}
+                                    {% for item in product.productimage_set.all %}
+                                    {% if item.featured %}
+                                    <img src="{{item.image.url}}" class="card-img-top" alt="...">
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <img src="{% static 'Uploads/products/placeholder.jpg' %}" class="card-img-top"
+                                         alt="My image">
+                                    {% endif %}
+                                </a>
+                                <div class="product-action">
+                                    <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                    <a href="#"><i class="fa fa-heart"></i></a>
+                                    <a href="#"><i class="fa fa-search"></i></a>
+                                </div>
+                            </div>
+                            <div class="product-price">
+                                <h3><span>৳ {{product.price}}</span></h3>
+                                <a class="btn" href="{% url 'singlepropa' product.slug %}"><i
+                                        class="fa fa-shopping-cart"></i>View</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="sidebar-widget brands">
+                    <h2 class="title">Our Brands</h2>
+                    <ul>
+                        {% for brand in brands%}
+                        <li><a href="#">{{ brand.brand }} </a><span>{{ brand.brand|brand_product_count }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+            <!-- Side Bar End -->
+        </div>
+    </div>
+</div>
+<!-- Product List End -->
+
+<!-- Brand Start -->
+<div class="brand">
+    <div class="container-fluid">
+        <div class="brand-slider">
+            {% for product in products%}
+            <div class="brand-item">
+                <img src="{{ product.brand.image.url }}" alt="">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Brand End -->
+
+{% endblock %}

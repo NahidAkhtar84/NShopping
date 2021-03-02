@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load temptags %}
+{% block content%}
+
+
+<!-- Cart Start -->
+
+{% if empty %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body cart">
+                    <div class="col-sm-12 empty-cart-cls text-center"> <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                        <h3><strong>{{ empty_msg }}</strong></h3>
+                        <h4>Add something to make me happy :)</h4> <a href="/products" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+
+        <div class="cart-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="cart-page-inner">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Name</th>
+                                            <th>Variations</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="align-middle">
+                                    {% for item in cart.cartitem_set.all %}
+
+                                        <tr>
+                                            <td>
+                                                <div class="img">
+<!--                                                    <a href="#"><img src="img/product-1.jpg" alt="Image"></a>-->
+                                                  {% for img in item.product.productimage_set.all %}
+                                                     {% if img.featured %}
+                                                     <div class="col-12">
+                                                        <img src="{{img.image.url}}" alt="Image" >
+
+                                                    </div>
+                                                     {% endif %}
+                                                     {% endfor %}
+                                                </div>
+                                            </td>
+                                          <td><p>{{ item.product.name }}</p></td>
+                                            <td>
+                                              {% if item.variations.all %}
+                                                {% for subitem in item.variations.all %}
+                                              <ul>
+                                                <li>{{ subitem.category|capfirst }}</li>
+                                                <b>{{ subitem.name|capfirst }}</b>
+                                              </ul>
+                                                {% endfor %}
+                                              {% endif %}
+                                            </td>
+                                            <td>{{ item.product.price|currency_sign }}</td>
+                                            <td>
+                                                <div class="qty">
+                                                    <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                                    <input type="text" value="{{ item.quantity }}">
+                                                    <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>{{ item.product.price|quantity_price_multiplication:item.quantity|currency_sign }}</td>
+                                          <td><a href="{% url 'remove_from_cart' item.id %}?qty=0"><i class="fa fa-trash"></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-4">
+                        <div class="cart-page-inner">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {% if not cart.couponapplied %}
+                                    <div class="coupon">
+                                      <form method="POST" action="/coupon">
+                                        {% csrf_token %}
+                                        <input name="coupon" type="text" placeholder="Coupon Code">
+                                        <input class="btn btn-info" type="submit" value="Apply Code" >
+<!--                                        <button>Apply Code</button>-->
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="cart-summary">
+                                        <div class="cart-content">
+                                            <h1>Cart Summary</h1>
+                                            <p>Sub Total<span>{{ cart.total|currency_sign }}</span></p>
+                                            <hr>
+                                            <p>After applying Coupon</p>
+                                            <h2>Total<span>{{ cart.coupontotal|currency_sign }}</span></h2>
+                                        </div>
+                                        <div class="cart-btn">
+                                          <a href='{% url "checkout" %}'><button>Checkout</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cart End -->
+
+{% endif %}
+
+
+<!--***********************************************************************************************-->
+
+<!--<H1>Your Basket</H1>-->
+
+<!--{% if empty %}-->
+<!--  <div class="mx-auto">-->
+<!--    <h2>{{ empty_msg }}</h2>-->
+<!--  </div>-->
+<!--{% else %}-->
+<!--<table class="table">-->
+<!--  <thead class="thead-dark">-->
+<!--    <tr class="table-info">-->
+<!--      <th scope="col">sl no</th>-->
+<!--      <th scope="col">Product Name</th>-->
+<!--      <th scope="col">Variations</th>-->
+<!--      <th scope="col">Price</th>-->
+<!--      <th scope="col">Quantity</th>-->
+<!--      <th scope="col">Actions</th>-->
+<!--    </tr>-->
+<!--  </thead>-->
+<!--  <tbody>-->
+<!--  {% for item in cart.cartitem_set.all %}-->
+<!--    <tr>-->
+<!--      <th scope="row">{{ forloop.counter }}</th>-->
+<!--      <td>{{ item.product.name }}</td>-->
+<!--      <td>{% if item.variations.all %}-->
+<!--        {% for subitem in item.variations.all %}-->
+<!--        <li>{{ subitem.category|capfirst }}: {{ subitem.name|capfirst }}</li>-->
+<!--        {% endfor %}-->
+<!--        {% endif %}-->
+<!--      </td>-->
+<!--      <td>{{ item.product.price }}</td>-->
+<!--      <td>{{ item.quantity }}</td>-->
+<!--      <td><a href="{% url 'remove_from_cart' item.id %}?qty=0">Remove</a></td>-->
+<!--    </tr>-->
+<!--{% endfor %}-->
+<!--  </tbody>-->
+<!--  <tfoot>-->
+<!--    <tr class="table-danger">-->
+<!--      <td colspan="5">Total</td>-->
+<!--      <td>{{ cart.total }}</td>-->
+<!--    </tr>-->
+<!--  </tfoot>-->
+<!--</table>-->
+<!--</table>-->
+<!--<hr>-->
+<!--<a href='{% url "checkout" %}'>Checkout</a>-->
+
+{% endif %}
+
+{% endblock %}

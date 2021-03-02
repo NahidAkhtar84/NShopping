@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load temptags %}
+{% block content%}
+
+<!-- My Account Start -->
+        <div class="my-account">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="dashboard-nav" data-toggle="pill" href="#aboutus-tab" role="tab"><i class="fa fa-address-card"></i>About Us</a>
+                            <a class="nav-link" id="orders-nav" data-toggle="pill" href="#privacy-policy-tab" role="tab"><i class="fa fa-key"></i>Privacy Policy</a>
+                            <a class="nav-link" id="payment-nav" data-toggle="pill" href="#terms-conditions-tab" role="tab"><i class="fa fa-align-left"></i>Terms and Conditions</a>
+                            <a class="nav-link" id="address-nav" data-toggle="pill" href="#payment-policy-tab" role="tab"><i class="fa fa-money-check-alt"></i>Payment Policy</a>
+                            <a class="nav-link" id="account-nav" data-toggle="pill" href="#shipping-policy-tab" role="tab"><i class="fa fa-shipping-fast"></i>Shipping Policy</a>
+                            <a class="nav-link" id="accoun-nav" data-toggle="pill" href="#return-policy-tab" role="tab"><i class="fa fa-undo"></i>Return Policy</a>
+
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="tab-content">
+                            <div class="{% if tabinfo == 'aboutus-tab' %}show active {% else %} tab-pane fade {% endif %}" id="aboutus-tab" role="tabpanel" aria-labelledby="dashboard-nav">
+                                <h4>About <b>Us</b></h4>
+                                <p>
+                                    {{ policy.aboutus }}
+                                </p>
+                            </div>
+                            <div class="tab-pane fade {% if tabinfo == 'privacy-policy-tab' %}show active {% else %} tab-pane fade {% endif %}" id="privacy-policy-tab" role="tabpanel" aria-labelledby="orders-nav">
+                                <h4>Privacy <b>Policy</b></h4>
+                                <p>
+                                    {{ policy.privacy_policy }}
+                                </p>
+                            </div>
+                            <div class="tab-pane fade {% if tabinfo == 'terms-conditions-tab' %}show active {% else %} tab-pane fade {% endif %}" id="terms-conditions-tab" role="tabpanel" aria-labelledby="payment-nav">
+                                <h4>Terms and <b>Conditions</b></h4>
+                                <p>
+                                    {{ policy.terms_conditions }}
+                                </p>
+                            </div>
+
+                            <div class="tab-pane fade {% if tabinfo == 'payment-policy-tab' %}show active {% else %} tab-pane fade {% endif %}" id="payment-policy-tab" role="tabpanel" aria-labelledby="payment-nav">
+                                <h4>Payment <b>Policy</b></h4>
+                                <p>
+                                    {{ policy.payment_policy }}
+                                </p>
+                            </div>
+
+                            <div class="tab-pane fade {% if tabinfo == 'shipping-policy-tab' %}show active {% else %} tab-pane fade {% endif %}" id="shipping-policy-tab" role="tabpanel" aria-labelledby="payment-nav">
+                                <h4>Shipping <b>Policy</b></h4>
+                                <p>
+                                    {{ policy.shipping_policy }}
+                                </p>
+                            </div>
+
+                            <div class="tab-pane fade {% if tabinfo == 'return-policy-tab' %}show active {% else %} tab-pane fade {% endif %}" id="return-policy-tab" role="tabpanel" aria-labelledby="payment-nav">
+                                <h4>Return <b>Policy</b></h4>
+                                <p>
+                                    {{ policy.return_policy }}
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- My Account End -->
+
+
+{% endblock %}
